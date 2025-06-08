@@ -33,8 +33,10 @@ function playSong(index) {
 function togglePlay() {
   if (isPlaying) {
     audio.pause();
+    document.getElementById("play-btn").textContent = "▶️";
   } else {
-    audio.play().catch(e => console.log("Play error:", e)); // Ini bantu debug
+    audio.play().catch(e => console.log("Play error:", e));
+    document.getElementById("play-btn").textContent = "⏸️";
   }
   isPlaying = !isPlaying;
   
@@ -88,3 +90,17 @@ function draw() {
 }
 
 draw();
+
+document.addEventListener('keydown', (e) => {
+  if (e.code === "Space") togglePlay();
+  if (e.code === "ArrowRight") nextSong();
+  if (e.code === "ArrowLeft") prevSong();
+});
+
+
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); // Panggil sekali di awal

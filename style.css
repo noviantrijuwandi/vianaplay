@@ -107,4 +107,20 @@ footer {
   color: #bbb;
   z-index: 2;
 }
+@media (max-width: 600px) {
+  .player {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .controls button {
+    padding: 10px 12px;
+    font-size: 1em;
+  }
+
+  canvas {
+    height: 50px;
+  }
+}
+
 
