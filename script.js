@@ -82,7 +82,7 @@ function draw() {
   dataArray.forEach((value, i) => {
     const height = value / 2;
     const x = i * barWidth;
-    ctx.fillStyle = "#1db954";
+    ctx.fillStyle = "#f0f0f1";
     ctx.fillRect(x, canvas.height - height, barWidth - 2, height);
   });
 }
