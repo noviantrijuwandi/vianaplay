@@ -33,10 +33,8 @@ function playSong(index) {
 function togglePlay() {
   if (isPlaying) {
     audio.pause();
-    document.getElementById("play-btn").textContent = "▶️";
   } else {
     audio.play().catch(e => console.log("Play error:", e));
-    document.getElementById("play-btn").textContent = "⏸️";
   }
   isPlaying = !isPlaying;
   
