@@ -95,10 +95,5 @@ document.addEventListener('keydown', (e) => {
   if (e.code === "ArrowLeft") prevSong();
 });
 
-
-function resizeCanvas() {
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
-}
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Panggil sekali di awal
