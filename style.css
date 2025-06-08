@@ -83,7 +83,6 @@ canvas {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
-  filter: blur(2px) brightness(0.6);
 }
 
 #overlay {
@@ -126,8 +125,6 @@ footer {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
-  opacity: 0.9;
-  filter: blur(2px) brightness(0.6);
   }
 }
 
