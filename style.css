@@ -175,4 +175,75 @@ input[type=range]::-webkit-slider-thumb {
     padding-bottom: 60px;
   }
 }
+.volume-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
 
+#volume-icon {
+  font-size: 1.2em;
+  cursor: pointer;
+}
+/* Sudah dari sebelumnya: Sesuaikan agar terlihat elegan */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 150px;
+  height: 6px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #4a90e2 100%, #ccc 0%);
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #4a90e2;
+  cursor: pointer;
+  margin-top: -5px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #4a90e2;
+  cursor: pointer;
+}
+
+button.active {
+  background: #4a90e2;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .controls input[type="range"] {
+    width: 120px;
+  }
+
+  #volume-icon {
+    font-size: 1em;
+  }
+}
+
+#volume-icon {
+  transition: transform 0.3s ease;
+}
+
+#volume-icon:hover {
+  transform: scale(1.2);
+}
+.controls button {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.controls button:hover {
+  transform: scale(1.05);
+}

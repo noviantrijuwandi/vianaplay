@@ -11,10 +11,13 @@ const playlistEl = document.getElementById("playlist");
 const canvas = document.getElementById("visualizer");
 const ctx = canvas.getContext("2d");
 
+let previousVolume = 1;
+
 const songs = [
   { title: "Tatsuya Kitani - Where Our Blue Is - From THE FIRST TAKE (1)", file: "music/lagu1.mp3"},
   { title: "Tetsuya Hirahata - 恋に首輪 (Love on a Leash) (feat. Tatsuya Kitani)", file: "music/lagu2.mp3"},
-  { title: "Tatsuya Kitani - Two Drifters - From THE FIRST TAKE", file: "music/lagu3.mp3"}
+  { title: "Tatsuya Kitani - Two Drifters - From THE FIRST TAKE", file: "music/lagu3.mp3"},
+  { title: "Naykilla, Tenxi & Jemsii - Kasih Aba-Aba", file: "music/lagu4.mp3"}
 ];
 
 let currentIndex = 0;
@@ -36,10 +39,7 @@ function playSong(index) {
   audio.play();
   isPlaying = true;
 }
-function toggleShuffle() {
-  isShuffle = !isShuffle;
-  alert("Shuffle: " + (isShuffle ? "ON" : "OFF"));
-}
+
 function toggleShuffle() {
   isShuffle = !isShuffle;
   const btn = document.querySelector('button[onclick="toggleShuffle()"]');
@@ -48,11 +48,6 @@ function toggleShuffle() {
 }
 
 
-
-function toggleRepeat() {
-  isRepeat = !isRepeat;
-  alert("Repeat: " + (isRepeat ? "ON" : "OFF"));
-}
 function toggleRepeat() {
   isRepeat = !isRepeat;
   const btn = document.querySelector('button[onclick="toggleRepeat()"]');
@@ -178,4 +173,70 @@ resizeCanvas(); // Panggil sekali di awal
 
 document.querySelector('button[onclick="toggleShuffle()"]').classList.toggle("active", isShuffle);
 document.querySelector('button[onclick="toggleRepeat()"]').classList.toggle("active", isRepeat);
+
+function updateSliderBackground(slider) {
+  const val = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+  slider.style.background = `linear-gradient(to right, #4a90e2 0%, #4a90e2 ${val}%, #ccc ${val}%, #ccc 100%)`;
+}
+
+// Inisialisasi awal
+updateSliderBackground(volumeSlider);
+updateSliderBackground(progressBar);
+
+// Event listener
+volumeSlider.addEventListener("input", () => {
+  audio.volume = volumeSlider.value;
+  updateSliderBackground(volumeSlider);
+});
+
+progressBar.addEventListener("input", () => {
+  audio.currentTime = progressBar.value;
+  updateSliderBackground(progressBar);
+});
+
+audio.addEventListener("timeupdate", () => {
+  progressBar.value = Math.floor(audio.currentTime);
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+  updateSliderBackground(progressBar);
+});
+
+audio.addEventListener("loadedmetadata", () => {
+  progressBar.max = Math.floor(audio.duration);
+  durationEl.textContent = formatTime(audio.duration);
+  updateSliderBackground(progressBar);
+});
+
+const volumeIcon = document.getElementById("volume-icon");
+
+volumeSlider.addEventListener("input", () => {
+  const volume = volumeSlider.value;
+  audio.volume = volume;
+  updateSliderBackground(volumeSlider);
+  updateVolumeIcon(volume);
+});
+
+volumeIcon.addEventListener("click", () => {
+  if (audio.muted) {
+    audio.muted = false;
+    volumeSlider.value = previousVolume;
+  } else {
+    previousVolume = volumeSlider.value;
+    audio.muted = true;
+    volumeSlider.value = 0;
+  }
+  updateSliderBackground(volumeSlider);
+  updateVolumeIcon(audio.volume);
+});
+
+function updateVolumeIcon(volume) {
+  if (audio.muted || volume == 0) {
+    volumeIcon.textContent = "🔇";
+  } else if (volume < 0.4) {
+    volumeIcon.textContent = "🔈";
+  } else if (volume < 0.8) {
+    volumeIcon.textContent = "🔉";
+  } else {
+    volumeIcon.textContent = "🔊";
+  }
+}
 
