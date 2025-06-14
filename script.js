@@ -1,3 +1,10 @@
+let isShuffle = false;
+let isRepeat = false;
+const volumeSlider = document.getElementById("volume");
+const progressBar = document.getElementById("progress");
+const currentTimeEl = document.getElementById("currentTime");
+const durationEl = document.getElementById("duration");
+
 const audio = document.getElementById("audio");
 const currentTitle = document.getElementById("current-title");
 const playlistEl = document.getElementById("playlist");
@@ -29,18 +36,56 @@ function playSong(index) {
   audio.play();
   isPlaying = true;
 }
+function toggleShuffle() {
+  isShuffle = !isShuffle;
+  alert("Shuffle: " + (isShuffle ? "ON" : "OFF"));
+}
+function toggleShuffle() {
+  isShuffle = !isShuffle;
+  const btn = document.querySelector('button[onclick="toggleShuffle()"]');
+  btn.classList.toggle("active", isShuffle);
+  btn.textContent = isShuffle ? "🎲" : "🔀";
+}
+
+
+
+function toggleRepeat() {
+  isRepeat = !isRepeat;
+  alert("Repeat: " + (isRepeat ? "ON" : "OFF"));
+}
+function toggleRepeat() {
+  isRepeat = !isRepeat;
+  const btn = document.querySelector('button[onclick="toggleRepeat()"]');
+  btn.classList.toggle("active", isRepeat);
+  btn.textContent = isRepeat ? "🔂" : "🔁";
+}
+
+
+
+volumeSlider.addEventListener("input", () => {
+  audio.volume = volumeSlider.value;
+});
+
 
 function togglePlay() {
-  if (isPlaying) {
-    audio.pause();
-  } else {
+  if (audio.paused) {
     audio.play().catch(e => console.log("Play error:", e));
+    isPlaying = true;
+  } else {
+    audio.pause();
+    isPlaying = false;
   }
-  isPlaying = !isPlaying;
-  
+
+  // Aktifkan AudioContext jika dibutuhkan
   if (audioCtx.state === "suspended") {
-  audioCtx.resume();
-}
+    audioCtx.resume();
+  }
+
+  // (Opsional) Ubah teks/icon tombol ▶️⏸️
+  const toggleBtn = document.querySelector('button[onclick="togglePlay()"]');
+  if (toggleBtn) {
+    toggleBtn.textContent = isPlaying ? "⏸️" : "▶️";
+  }
 }
 
 function nextSong() {
@@ -59,7 +104,20 @@ function highlightCurrent() {
   });
 }
 
-audio.addEventListener("ended", nextSong);
+audio.addEventListener("ended", () => {
+  if (isRepeat) {
+    playSong(currentIndex);
+  } else if (isShuffle) {
+    let next;
+    do {
+      next = Math.floor(Math.random() * songs.length);
+    } while (next === currentIndex);
+    playSong(next);
+  } else {
+    nextSong();
+  }
+});
+
 
 // Visualizer
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -86,6 +144,26 @@ function draw() {
     ctx.fillRect(x, canvas.height - height, barWidth - 2, height);
   });
 }
+audio.addEventListener("loadedmetadata", () => {
+  progressBar.max = Math.floor(audio.duration);
+  durationEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener("timeupdate", () => {
+  progressBar.value = Math.floor(audio.currentTime);
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+});
+
+progressBar.addEventListener("input", () => {
+  audio.currentTime = progressBar.value;
+});
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
 
 draw();
 
@@ -97,3 +175,7 @@ document.addEventListener('keydown', (e) => {
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Panggil sekali di awal
+
+document.querySelector('button[onclick="toggleShuffle()"]').classList.toggle("active", isShuffle);
+document.querySelector('button[onclick="toggleRepeat()"]').classList.toggle("active", isRepeat);
+

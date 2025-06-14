@@ -49,6 +49,11 @@ body {
 .controls button:hover {
   background: #f0f0f1;
 }
+.controls button.active {
+  background: #4a90e2;
+  color: white;
+}
+
 
 #playlist {
   list-style: none;
@@ -125,6 +130,49 @@ footer {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
+  }
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.controls button {
+  font-size: 1.2em;
+  margin: 5px;
+  padding: 8px 12px;
+}
+
+.controls input[type=range] {
+  width: 200px;
+}
+
+.time {
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+
+input[type=range] {
+  appearance: none;
+  background: #eee3e3;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #4a90e2;
+  cursor: pointer;
+}
+
+
+@media (max-width: 600px) {
+  .container {
+    padding-bottom: 60px;
   }
 }
 
