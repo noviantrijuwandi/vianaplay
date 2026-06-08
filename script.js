@@ -18,6 +18,7 @@ const songs = [
   { title: "Tetsuya Hirahata - 恋に首輪 (Love on a Leash) (feat. Tatsuya Kitani)", file: "music/lagu2.mp3"},
   { title: "Tatsuya Kitani - Two Drifters - From THE FIRST TAKE", file: "music/lagu3.mp3"},
   { title: "Naykilla, Tenxi & Jemsii - Kasih Aba-Aba", file: "music/lagu4.mp3"}
+  { title: "musik enak ini", file: "music/lagu5.mp3"}
 ];
 
 let currentIndex = 0;
